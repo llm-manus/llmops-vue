@@ -437,12 +437,12 @@ watch(
 )
 
 // 17.页面挂在完毕请求数据
-onMounted(() => {
+onMounted(async () => {
   // 16.1 提取WebApp凭证标识
   const token = String(route.params?.token)
 
   // 16.2 异步加载数据
-  Promise.all([loadWebApp(token), loadWebAppConversations(token)])
+  await Promise.all([loadWebApp(token), loadWebAppConversations(token)])
 
   // 16.3 默认新增空白会话
   addConversation()
