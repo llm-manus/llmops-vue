@@ -52,6 +52,7 @@ const onSubmit = async ({ errors }: { errors: Record<string, ValidatedError> | u
     description: form.value.description,
     prompt: form.value.prompt,
     model_config: form.value.model_config,
+    language_model_config: form.value.model_config,
     inputs: cloneInputs.map((input: any) => {
       return {
         name: input.name,
