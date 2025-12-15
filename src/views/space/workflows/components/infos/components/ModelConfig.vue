@@ -65,7 +65,6 @@ const hideModelTrigger = () => {
     model: model_name,
     parameters: form.value.parameters,
   }
-
   // 3.3 提交应用草稿配置更新
   emits('update:model_config', model_config)
 }
@@ -73,7 +72,6 @@ const hideModelTrigger = () => {
 watch(
   () => props.model_config,
   (newValue) => {
-    console.log(props.model_config)
     // 1.完成表单数据初始化
     form.value['selectValue'] = `${newValue?.provider}/${newValue.model}`
     form.value['provider'] = newValue?.provider

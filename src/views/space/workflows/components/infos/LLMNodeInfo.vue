@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { type GraphNode, useVueFlow } from '@vue-flow/core'
+import { useVueFlow } from '@vue-flow/core'
 import { cloneDeep } from 'lodash'
 import { getReferencedVariables } from '@/util/helper'
 import { Message, type ValidatedError } from '@arco-design/web-vue'
@@ -42,7 +42,6 @@ const removeFormInputField = (idx: number) => {
 const onSubmit = async ({ errors }: { errors: Record<string, ValidatedError> | undefined }) => {
   // 4.1 检查表单是否出现错误，如果出现错误则直接结束
   if (errors) return
-
   // 4.2 深度拷贝表单数据内容
   const cloneInputs = cloneDeep(form.value.inputs)
 
