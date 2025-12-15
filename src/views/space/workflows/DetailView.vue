@@ -470,7 +470,7 @@ onMounted(async () => {
       </div>
     </div>
     <!-- 中间编排画布 -->
-    <div class="flex-1">
+    <div style="height: 900px; border: 1px solid #ccc">
       <vue-flow
         :min-zoom="0.25"
         :max-zoom="2"
