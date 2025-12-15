@@ -43,7 +43,8 @@ const modelOptions = computed(() => {
 // 2.定义选择模型处理器
 const changeModel = (value: any): any => {
   // 2.1 使用/拆分出提供商+模型名字
-  const [provider_name, model_name] = value.splice('/')
+  const [provider_name, model_name] = value.split('/')
+
   // 2.2 发起请求获取模型详情
   loadLanguageModel(provider_name, model_name).then(() => {
     // 2.3 重新赋值parameters
@@ -60,9 +61,9 @@ const changeModel = (value: any): any => {
 // 3.触发器隐藏处理器，提交数据进行更新
 const hideModelTrigger = () => {
   // 3.1 处理表单数据
-  const [provider_name, model_name] = form.value.selectValue.splice('/')
+  const [provider_name, model_name] = form.value.selectValue.split('/')
 
-  // 3.2 提取表单模型选取
+  // 3.2 提取表单模型配置
   const model_config = {
     provider: provider_name,
     model: model_name,
@@ -80,12 +81,11 @@ watch(
   () => props.model_config,
   (newValue) => {
     // 1.完成表单数据初始化
-    // console.log('aaa', newValue?.parameters)
     form.value['selectValue'] = `${newValue?.provider}/${newValue.model}`
     form.value['provider'] = newValue?.provider
     form.value['model'] = newValue?.model
     form.value['parameters'] = newValue?.parameters
-    // console.log('aaabbbd', form.value['parameters']['name'])
+
     // 2.请求语言模型详情API接口
     newValue?.provider && loadLanguageModel(newValue?.provider as string, newValue?.model as string)
   },
