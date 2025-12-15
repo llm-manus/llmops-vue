@@ -210,13 +210,13 @@ const handleSubmitQuestion = async (question: string) => {
 
 // 8.定义文件上传触发器
 const triggerFileInput = () => {
-  // 1.检测上传的图片是否超过5
-  if (image_urls.value.length > 5) {
+  // 1.检测上传的图片数量是否超过5
+  if (image_urls.value.length >= 5) {
     Message.error('对话上传图片数量不能超过5张')
     return
   }
 
-  // 2.满足提交出发上报
+  // 2.满足条件触发上传
   fileInput.value.click()
 }
 
@@ -432,6 +432,7 @@ onMounted(async () => {
                 placeholder="发送消息或创建AI应用..."
                 @keyup.enter="handleSubmit"
               />
+              <!-- 上传图片输入框 -->
               <input
                 type="file"
                 ref="fileInput"

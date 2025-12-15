@@ -36,10 +36,10 @@ const updateAccount = async () => {
   accountStore.update(current_user.value)
 }
 
-// 3. 关闭模态窗
+// 3.关闭模态窗处理器
 const handleCancel = () => emits('update:visible', false)
 
-// 4. 监听模态窗关闭事件
+// 4.监听模态窗关闭事件
 watch(
   () => props.visible,
   (newValue) => {

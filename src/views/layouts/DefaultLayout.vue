@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLogout } from '@/hooks/use-auth.ts'
 import LayoutSidebar from './components/LayoutSidebar.vue'
-import { logout } from '@/service/auth'
-import { getCurrentUser } from '@/service/account'
+import { useGetCurrentUser } from '@/hooks/use-account'
 import { useCredentialStore } from '@/stores/credential'
 import { useAccountStore } from '@/stores/account'
 import SettingModal from '@/views/layouts/components/SettingModal.vue'
@@ -13,13 +13,15 @@ const settingModalVisible = ref(false)
 const router = useRouter()
 const credentialStore = useCredentialStore()
 const accountStore = useAccountStore()
+const { handleLogout: handleLogoutHook } = useLogout()
+const { current_user, loadCurrentUser } = useGetCurrentUser()
 
-// 2. 退出登录按钮
+// 2.退出登录按钮
 const handleLogout = async () => {
   // 2.1 发起请求退出登录
-  await logout()
+  await handleLogoutHook()
 
-  // 2.2 清空授权凭证 + 账号信息
+  // 2.2 清空授权凭证+账号信息
   credentialStore.clear()
   accountStore.clear()
 
@@ -27,10 +29,10 @@ const handleLogout = async () => {
   await router.replace({ name: 'auth-login' })
 }
 
-// 3. 页面OOM加载完成时获取当前登录账号信息
+// 3.页面DOM加载完成时获取当前登录账号信息
 onMounted(async () => {
-  const resp = await getCurrentUser()
-  accountStore.update(resp.data)
+  await loadCurrentUser()
+  accountStore.update(current_user.value)
 })
 </script>
 
@@ -47,12 +49,14 @@ onMounted(async () => {
             class="block h-9 w-[110px] mb-5 bg-gray-200 hover:bg-gray-300 transition-all rounded-lg"
           />
           <!-- 创建AI应用按钮 -->
-          <a-button type="primary" long class="rounded-lg mb-4">
-            <template #icon>
-              <icon-plus />
-            </template>
-            创建 AI 应用
-          </a-button>
+          <router-link :to="{ name: 'space-apps-list', query: { create_type: 'app' } }">
+            <a-button type="primary" long class="rounded-lg mb-4">
+              <template #icon>
+                <icon-plus />
+              </template>
+              创建 AI 应用
+            </a-button>
+          </router-link>
           <!-- 侧边栏导航 -->
           <layout-sidebar />
         </div>
@@ -62,7 +66,13 @@ onMounted(async () => {
             class="flex items-center p-2 gap-2 transition-all cursor-pointer rounded-lg hover:bg-gray-100"
           >
             <!-- 头像 -->
-            <a-avatar :size="32" class="text-sm bg-blue-700">E</a-avatar>
+            <a-avatar
+              :size="32"
+              class="text-sm bg-blue-700"
+              :image-url="accountStore.account.avatar"
+            >
+              {{ accountStore.account.name[0] }}
+            </a-avatar>
             <!-- 个人信息 -->
             <div class="flex flex-col">
               <div class="text-sm text-gray-900">{{ accountStore.account.name }}</div>
